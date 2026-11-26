@@ -1,0 +1,52 @@
+name: Rastreador Chollos 24/7
+
+on:
+  schedule:
+    - cron: '11,31,51 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rastreador-chollos
+  cancel-in-progress: false
+
+jobs:
+  rastrear-chollos:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests beautifulsoup4 curl_cffi playwright
+
+      - name: Instalar Chromium y dependencias
+        run: |
+          python -m playwright install --with-deps chromium
+
+      - name: Ejecutar bot completo
+        env:
+          MEEPA_USER: ${{ secrets.MEEPA_USER }}
+          MEEPA_PASS: ${{ secrets.MEEPA_PASS }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python -u bot_multitienda.py
+
+      - name: Guardar base de datos actualizada
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add historial_multitienda.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Actualizar historial" && git push)
+
