@@ -39,7 +39,7 @@ MAX_OTRAS_TIENDAS_POR_PASADA = 25
 MAX_POR_TIENDA_EN_PASADA = 4
 
 # Pausa segura para no superar el límite de 20 mensajes/minuto de Telegram
-PAUSA_TELEGRAM_SEGUNDOS = 3.2
+PAUSA_TELEGRAM_SEGUNDOS = 2.2
 
 QUERY_PMH = "utf8=%E2%9C%93&order_by=discount+DESC&range=48&pmh=1&search=&commit=Filtrar&sellers%5B%5D=Todos+los+vendedores&seller_type=normal"
 QUERY_TOP = "utf8=%E2%9C%93&order_by=discount+DESC&range=24&search=&commit=Filtrar&sellers%5B%5D=Todos+los+vendedores&seller_type=normal"
